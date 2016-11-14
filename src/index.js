@@ -48,10 +48,11 @@ app.get('/task3A/:p1?/:p2?/:p3?', (req, res) => {
       volumes[i.volume] += i.size;
     });
     res.json(_.mapValues(volumes, v => `${v}B`));
+  } else {
+    const r = getParams(pc, p1, p2, p3);
+    if (r !== undefined) res.json(r);
+    else notFound(res);
   }
-  const r = getParams(pc, p1, p2, p3);
-  if (r !== undefined) res.json(r);
-  else notFound(res);
 });
 
 app.listen(3000, () => {
