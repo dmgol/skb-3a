@@ -18,14 +18,12 @@ app.use(cors());
 
 function getParams(object, ...props) {
   let result = object;
-  let isArray = false;
   for (const p of props) {
     if (p === undefined) break;
-    if (isArray && p === 'length') return undefined;
+    if (result.__proto__.hasOwnProperty(p)) return undefined; // eslint-disable-line
     result = result[p];
     console.log(JSON.stringify(result));
     if (!result) break;
-    isArray = _.isArrayLike(result);
   }
   return result;
 }
@@ -34,22 +32,20 @@ function notFound(res) {
   res.status(404).send('Not Found');
 }
 
-app.get('/task3A/:p1?/:p2?/:p3?', (req, res) => {
+app.get('/task3A/:p1?/:p2?/:p3?/:p4?/:p5?/:p6?/:p7?/:p8?/:p9?', (req, res) => {
   console.log(req.params);
 
-  const p1 = req.params.p1;
-  const p2 = req.params.p2;
-  const p3 = req.params.p3;
+  const p = _.values(req.params);
 
   const volumes = {};
-  if (req.params.p1 === 'volumes') {
+  if (p[0] === 'volumes') {
     pc.hdd.forEach((i) => {
       volumes[i.volume] = volumes[i.volume] || 0;
       volumes[i.volume] += i.size;
     });
     res.json(_.mapValues(volumes, v => `${v}B`));
   } else {
-    const r = getParams(pc, p1, p2, p3);
+    const r = getParams(pc, ...p);
     if (r !== undefined) res.json(r);
     else notFound(res);
   }
