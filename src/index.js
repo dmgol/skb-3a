@@ -51,7 +51,7 @@ app.get('/task3A/:p1?/:p2?/:p3?', (req, res) => {
   }
   const r = getParams(pc, p1, p2, p3);
   if (r !== undefined) res.json(r);
-  notFound(res);
+  else notFound(res);
 });
 
 app.listen(3000, () => {
